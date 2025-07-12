@@ -896,6 +896,9 @@ require('lazy').setup({
   require 'kickstart.plugins.neogit',
   require 'kickstart.plugins.gitsigns',
   require 'kickstart.plugins.undotree',
+  require 'kickstart.plugins.overseer',
+  require 'kickstart.plugins.compiler',
+  require 'kickstart.plugins.mutlicursors',
   -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
   --    This is the easiest way to modularize your config.
   --
@@ -906,7 +909,21 @@ require('lazy').setup({
   -- Or use telescope!
   -- In normal mode type `<space>sh` then write `lazy.nvim-plugin`
   -- you can continue same window with `<space>sr` which resumes last telescope search
-  vim.keymap.set('n', 'C-u', vim.cmd.UndotreeToggle, { desc = 'Opens Undo Tree' }),
+  vim.keymap.set('n', '<leader>u', vim.cmd.UndotreeToggle),
+  -- Open compiler
+  vim.api.nvim_set_keymap('n', '<leader>b', '<cmd>CompilerOpen<cr>', { noremap = true, silent = true }),
+
+  -- Redo last selected option
+  vim.api.nvim_set_keymap(
+    'n',
+    '<leader>rb',
+    '<cmd>CompilerStop<cr>' -- (Optional, to dispose all tasks before redo)
+      .. '<cmd>CompilerRedo<cr>',
+    { noremap = true, silent = true }
+  ),
+
+  -- Toggle compiler results
+  vim.api.nvim_set_keymap('n', '<leader>vb', '<cmd>CompilerToggleResults<cr>', { noremap = true, silent = true }),
 }, {
   ui = {
     -- If you are using a Nerd Font: set icons to an empty table which will use the
